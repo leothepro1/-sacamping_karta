@@ -2233,7 +2233,7 @@ function sektion73InjectFilterCSS() {
     padding: 6px 12px;
     border-radius: 999px;
     border: none;
-    background: #F0ECE9;
+    background: #f3f3f3;
     color: rgb(64, 61, 59);
     font-family: var(--sektion73-font);
     font-size: 14.5px;
@@ -2265,7 +2265,7 @@ background: #DDD7D2;
     align-items: center;
     justify-content: center;
     padding: 6px 10px;
-    background: #F0ECE9;
+    background: #f3f3f3;
     color: rgb(64, 61, 59);
     font-family: var(--sektion73-font);
     font-size: 14.5px;
@@ -2281,8 +2281,8 @@ background: #DDD7D2;
   background: #DDD7D2;
 }
 .sektion73ViewToggleBtn[aria-pressed="true"]{
-  background: #FFE6A3;
-  color: #5A3C00;
+  background: #6E99AE;
+  color: #fff;
   font-weight: 700;
 }
 
@@ -2311,10 +2311,10 @@ aspect-ratio: auto !important;
 }
       }
 .sektion73FilterBtn[aria-pressed="true"] {
-    background: #FFE6A3;
+    background: #6E99AE;
     border-color: rgba(90, 60, 0, .22);
-    color: #5A3C00;
-    font-weight: 700;
+    color: #fff;
+    font-weight: 600;
 }
 
     .sektion73FilterIco{
