@@ -1,0 +1,28 @@
+{
+  "category.accommodation": "Boenden",
+  "category.food-drink": "Mat & dryck",
+  "category.activities": "Att göra",
+  "category.shops": "Butiker",
+
+  "filter.all": "Visa alla",
+
+  "poi.apelvikstrand.title": "Apelvikstrand",
+  "poi.apelvikstrand.description": "Boende och camping vid Apelviken med havsutsikt.",
+  "poi.kusthotellet.title": "Kusthotellet",
+  "poi.kusthotellet.description": "Hotell med restaurang nära stranden.",
+  "poi.surfers-paradise.title": "Surfers Paradise",
+  "poi.surfers-paradise.description": "Restaurang och bar med havsutsikt.",
+  "poi.majas.title": "Majas",
+  "poi.majas.description": "Mysigt café vid havet.",
+  "poi.minigolf.title": "Minigolf",
+  "poi.minigolf.description": "Äventyrsgolf för hela familjen.",
+  "poi.apelviken-livs.title": "Apelviken Livs",
+  "poi.apelviken-livs.description": "Livsmedelsbutik med det du behöver.",
+
+  "cta.book": "Boka",
+  "cta.read-more": "Läs mer",
+  "cta.visit-website": "Besök webbplats",
+  "cta.directions": "Visa vägen",
+
+  "modal.close": "Stäng"
+}

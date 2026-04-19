@@ -1,0 +1,28 @@
+{
+  "category.accommodation": "Unterkünfte",
+  "category.food-drink": "Essen & Trinken",
+  "category.activities": "Aktivitäten",
+  "category.shops": "Geschäfte",
+
+  "filter.all": "Alle anzeigen",
+
+  "poi.apelvikstrand.title": "Apelvikstrand",
+  "poi.apelvikstrand.description": "Unterkunft und Camping in Apelviken mit Meerblick.",
+  "poi.kusthotellet.title": "Kusthotellet",
+  "poi.kusthotellet.description": "Hotel mit Restaurant in Strandnähe.",
+  "poi.surfers-paradise.title": "Surfers Paradise",
+  "poi.surfers-paradise.description": "Restaurant und Bar mit Meerblick.",
+  "poi.majas.title": "Majas",
+  "poi.majas.description": "Gemütliches Café am Meer.",
+  "poi.minigolf.title": "Minigolf",
+  "poi.minigolf.description": "Abenteuergolf für die ganze Familie.",
+  "poi.apelviken-livs.title": "Apelviken Lebensmittel",
+  "poi.apelviken-livs.description": "Lebensmittelgeschäft mit allem, was Sie brauchen.",
+
+  "cta.book": "Buchen",
+  "cta.read-more": "Mehr lesen",
+  "cta.visit-website": "Website besuchen",
+  "cta.directions": "Route anzeigen",
+
+  "modal.close": "Schließen"
+}

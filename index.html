@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apelvikstrand Karta</title>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      #sektion73MapRoot {
+        width: 100%;
+        border-radius: 0;
+        overflow: hidden;
+      }
+
+      #sektion73MapCanvas {
+        width: 100%;
+        height: 100vh;
+      }
+
+      header#header-root {
+        background: linear-gradient(
+          to bottom,
+          #f7f1eb 0%,
+          #f7f1eb 60%,
+          rgba(247, 242, 236, 0) 100%
+        ) !important;
+      }
+
+      a.mapboxgl-ctrl-logo,
+      .mapboxgl-ctrl-attrib-button,
+      .mapboxgl-ctrl-attrib.mapboxgl-compact,
+      .mapboxgl-ctrl-attrib {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    </style>
+  </head>
+  <body class="m-0 p-0 overflow-hidden">
+    <div id="root"></div>
+    <div
+      id="sektion73MapRoot"
+      aria-label="Interaktiv karta över Apelviken"
+      data-i18n-attr="aria-label:map.ariaLabel"
+    >
+      <div id="sektion73MapCanvas"></div>
+    </div>
+    <script>
+      window.__MAPBOX_TOKEN__ = "%VITE_MAPBOX_TOKEN%";
+    </script>
+    <script src="/apelvikstrand.maps.bootstrap.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

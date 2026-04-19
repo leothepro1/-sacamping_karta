@@ -1,0 +1,28 @@
+{
+  "category.accommodation": "Accommodation",
+  "category.food-drink": "Food & drink",
+  "category.activities": "Activities",
+  "category.shops": "Shops",
+
+  "filter.all": "Show all",
+
+  "poi.apelvikstrand.title": "Apelvikstrand",
+  "poi.apelvikstrand.description": "Accommodation and camping at Apelviken with ocean views.",
+  "poi.kusthotellet.title": "Kusthotellet",
+  "poi.kusthotellet.description": "Hotel with restaurant near the beach.",
+  "poi.surfers-paradise.title": "Surfers Paradise",
+  "poi.surfers-paradise.description": "Restaurant and bar with ocean views.",
+  "poi.majas.title": "Majas",
+  "poi.majas.description": "Cozy café by the sea.",
+  "poi.minigolf.title": "Mini Golf",
+  "poi.minigolf.description": "Adventure golf for the whole family.",
+  "poi.apelviken-livs.title": "Apelviken Grocery",
+  "poi.apelviken-livs.description": "Grocery store with everything you need.",
+
+  "cta.book": "Book",
+  "cta.read-more": "Read more",
+  "cta.visit-website": "Visit website",
+  "cta.directions": "Get directions",
+
+  "modal.close": "Close"
+}
