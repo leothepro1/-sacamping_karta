@@ -1380,7 +1380,7 @@ const sektion73Pins = [
   },
   {
     id: "sektion73Pin_tba_0007",
-    label: "TBA",
+    label: "ST1",
     filter: "Butiker",
     iconKey: "tba",
     ui: {
@@ -1389,11 +1389,18 @@ const sektion73Pins = [
     },
     lngLat: [12.122081, 57.350475],
     modal: {
-      kicker: { sv: "TBA", en: "TBA", de: "TBA" },
-      title: { sv: "TBA", en: "TBA", de: "TBA" },
-      images: [],
-      h: { sv: "TBA", en: "TBA", de: "TBA" },
-      p: { sv: "", en: "", de: "" }
+      kicker: { sv: "BENSINSTATION", en: "GAS STATION", de: "TANKSTELLE" },
+      title: { sv: "ST1", en: "ST1", de: "ST1" },
+      images: [
+        "https://res.cloudinary.com/dmgmoisae/image/upload/v1776672024/206914-1_ygadvh.jpg",
+        "https://res.cloudinary.com/dmgmoisae/image/upload/v1776672046/0fJZm5u7FPO6klc78EjctbdQC154-REGULAR_kxejvy.jpg"
+      ],
+      h: { sv: "ST1", en: "ST1", de: "ST1" },
+      p: {
+        sv: "St1-automatstation på Varbergsvägen i Åsa. Bensin, diesel och E85 dygnet runt, betalning vid pumpen. På plats finns även kiosk och butik med det vanliga — dricka, snacks, tidningar och det du glömde handla. Postombud för paket, både upphämtning och inlämning.",
+        en: "St1 self-service station on Varbergsvägen in Åsa. Petrol, diesel and E85 around the clock, with pay-at-the-pump. On site you'll also find a kiosk and shop with the usual — drinks, snacks, newspapers and the things you forgot to buy. Postal agent for parcels — both pickup and drop-off.",
+        de: "St1-Selbstbedienungstankstelle an der Varbergsvägen in Åsa. Benzin, Diesel und E85 rund um die Uhr, Bezahlung direkt an der Zapfsäule. Vor Ort auch Kiosk und Laden mit dem Üblichen — Getränke, Snacks, Zeitungen und das, was vergessen wurde. Poststelle für Pakete — Abholung und Abgabe."
+      }
     }
   },
   {
