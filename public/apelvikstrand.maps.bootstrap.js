@@ -18,6 +18,7 @@
   var sektion73MapboxJsSrc = "https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.js";
   var sektion73MapboxCssHref = "https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.css";
   var sektion73HeavyMapsSrc = "/apelvikstrand.maps.js";
+  var sektion73RoutesSrc = "/apelvikstrand.routes.js";
   var sektion73LottiePlayerSrc = "/lottie/lottie_light.min.js";
   var sektion73LottieDataSrc = "/lottie/loader.json";
 
@@ -253,7 +254,9 @@
     sektion73LoadCss(sektion73MapboxCssHref, function () {
       sektion73LoadScript(sektion73MapboxJsSrc, function () {
         sektion73LoadScript(sektion73HeavyMapsSrc, function () {
-          sektion73WaitForMapLoadThenHideOverlay();
+          sektion73LoadScript(sektion73RoutesSrc, function () {
+            sektion73WaitForMapLoadThenHideOverlay();
+          });
         });
       });
     });
