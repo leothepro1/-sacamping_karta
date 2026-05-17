@@ -270,8 +270,8 @@
       paceMps: 1.4,  // ~5 km/h promenadtempo
       rowLabel: "Gångväg",
       line: {
-        color: "#F0A500",
-        casingColor: "rgba(240,165,0,.18)",
+        color: "#6E99AE",
+        casingColor: "rgba(110,153,174,.18)",
         width: 4.5,
         casingWidth: 11,
         opacity: 1
@@ -290,8 +290,8 @@
       paceMps: 4.2,  // ~15 km/h cykeltempo
       rowLabel: "Cykelväg",
       line: {
-        color: "#336aea",
-        casingColor: "rgba(51,106,234,.18)",
+        color: "#6E99AE",
+        casingColor: "rgba(110,153,174,.18)",
         width: 4.5,
         casingWidth: 11,
         opacity: 1
@@ -587,6 +587,8 @@
       var duration = a.durationMs || 6000;
       var zoomOutDur = 1400;
       var t0 = performance.now();
+      // Cacha padding en gång — undviker getBoundingClientRect varje frame
+      var trackPadding = sektion73GetCardPadding();
 
       function tick(now) {
         if (!state.running) return;
@@ -664,15 +666,28 @@
           if (drvDot) drvDot.setLngLat(drvSlice[drvSlice.length - 1]);
         }
 
-        // 4) Kamerapan — STARTAR efter overview-zoom är klar
+        // 4) Kamerapan — lazy follow: rör kameran bara när cirkeln
+        //    riskerar att lämna viewport, annars stå still
         if (elapsed > zoomOutDur) {
-          sektion73Map.easeTo({
-            center: head,
-            pitch: 35,
-            duration: 300,
-            padding: sektion73GetCardPadding(),
-            easing: function (t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
-          });
+          var px  = sektion73Map.project(head);
+          var ctr = sektion73Map.getContainer();
+          var margin = 80;
+          var bpad = trackPadding.bottom || 0;
+          var outsideSafeZone =
+            px.x < margin ||
+            px.x > ctr.offsetWidth  - margin ||
+            px.y < margin ||
+            px.y > ctr.offsetHeight - margin - bpad;
+          if (outsideSafeZone) {
+            sektion73Map.easeTo({
+              center: head,
+              pitch: 35,
+              bearing: sektion73Bearing,
+              duration: 700,
+              padding: trackPadding,
+              easing: function (t) { return t * (2 - t); }
+            });
+          }
         }
 
         if (rawT < 1) {
@@ -770,17 +785,17 @@
         ".sektion73RouteHeadDot {",
         "  width: 14px; height: 14px;",
         "  border-radius: 50%;",
-        "  background: #F0A500;",
+        "  background: #6E99AE;",
         "  border: 2.5px solid #fff;",
-        "  box-shadow: 0 0 0 0 rgba(240,165,0,.4), 0 1px 6px rgba(0,0,0,.25);",
+        "  box-shadow: 0 0 0 0 rgba(110,153,174,.4), 0 1px 6px rgba(0,0,0,.25);",
         "  animation: sektion73DotPulse 2s ease-in-out infinite;",
         "  pointer-events: none;",
         "  transition: opacity .3s ease;",
         "}",
         ".sektion73RouteHeadDot.is-arrived { animation: sektion73DotArrive .4s ease forwards; }",
         "@keyframes sektion73DotPulse {",
-        "  0%,100% { box-shadow: 0 0 0 0 rgba(240,165,0,.35), 0 1px 6px rgba(0,0,0,.25); }",
-        "  50%     { box-shadow: 0 0 0 8px rgba(240,165,0,0),  0 1px 6px rgba(0,0,0,.25); }",
+        "  0%,100% { box-shadow: 0 0 0 0 rgba(110,153,174,.35), 0 1px 6px rgba(0,0,0,.25); }",
+        "  50%     { box-shadow: 0 0 0 8px rgba(110,153,174,0),  0 1px 6px rgba(0,0,0,.25); }",
         "}",
         "@keyframes sektion73DotArrive {",
         "  0%   { transform: scale(1); }",
@@ -895,7 +910,7 @@
         "/* Dölj alla pin-markörer när en route är aktiv */",
         "body.sektion73-route-active .sektion73PinWrap { display: none !important; }",
         "/* Led-lista (kategorimeny) */",
-        ".sektion73LedList { padding: 4px 8px 8px; display: flex; flex-direction: column; gap: 2px; }",
+        ".sektion73LedList { padding: 8px; display: flex; flex-direction: column; gap: 2px; }",
         ".sektion73LedItem {",
         "  display: flex; align-items: center; gap: 12px;",
         "  padding: 10px 8px;",
@@ -950,7 +965,7 @@
         "  background: var(--sektion73-route-color);",
         "}",
         ".sektion73LedDetailHeroIco {",
-        "  width: 44px; height: 44px;",
+        "  width: 32px; height: 32px;",
         "  border-radius: 999px;",
         "  background: #fff;",
         "  display: inline-flex; align-items: center; justify-content: center;",
@@ -1009,10 +1024,10 @@
     var sektion73Icons = {
       walk: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
             '<path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9 7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>',
-      bike: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
-            '<path d="M5 20.5C3.07 20.5 1.5 18.93 1.5 17S3.07 13.5 5 13.5 8.5 15.07 8.5 17 6.93 20.5 5 20.5zm0-5.5c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm5.8-10L12.5 8H15v6h-1l-4-4-1.5 1.5 4 4V20h-1.5v-3l-3-3-1.6 1.6 4.6 4.6V20h3v-5.5l-2.7-2.7 1-1L18 14.5V20h1.5V14l-3.4-3.4 1-1 .9.9c0 .5.4 1 1 1s1-.4 1-1-.5-1-1-1-1 .5-1 1c0 .2.1.4.2.5L17 11.6l-3.5-3.5 1.6-1.6.6.6c.2.2.4.3.7.3.5 0 1-.4 1-1s-.5-1-1-1c-.3 0-.5.1-.7.3l-3.5 3.5L11 7.5 13 5.5l.6.6c.2.2.4.3.7.3.5 0 1-.5 1-1s-.5-1-1-1c-.3 0-.5.1-.7.3l-3 3.1z"/></svg>',
-      trail: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">' +
-             '<path d="M21.71 11.29l-9-9c-.39-.39-1.02-.39-1.41 0l-9 9c-.39.39-.39 1.02 0 1.41l9 9c.39.39 1.02.39 1.41 0l9-9c.39-.38.39-1.01 0-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>'
+      bike: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M12.75 6.5a.75.75 0 0 1 .75-.75h1.14a1.25 1.25 0 0 1 1.185.855l.88 2.637.72 1.8a4 4 0 1 1-1.42.491l-.23-.574-3.92 4.791H9.93A4.001 4.001 0 0 1 2 15a4 4 0 0 1 4.907-3.897l1.292-1.777-.69-1.576H6.5a.75.75 0 0 1 0-1.5h3a.75.75 0 0 1 0 1.5h-.353l.437 1h5.375l-.5-1.5H13.5a.75.75 0 0 1-.75-.75Zm3.822 6.448a2.5 2.5 0 1 0 1.436-.448l.688 1.722a.75.75 0 0 1-1.392.556l-.732-1.83Zm-6.219 1.302H9.93a4.001 4.001 0 0 0-1.625-2.52l.59-.812 1.458 3.332Zm-1.967 0a2.505 2.505 0 0 0-.963-1.306l-.95 1.306h1.913Zm-3.415-.485.918-1.263a2.5 2.5 0 1 0 2.497 3.248H5.982a1.25 1.25 0 0 1-1.011-1.985Zm9.446-3.515h-4.176l1.455 3.326 2.721-3.326Z" fill="#171717" fill-rule="evenodd" clip-rule="evenodd"/>' +
+            '</svg>',
+      trail: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.34 6.33003L15.34 3.33003C15.34 3.33003 15.31 3.33003 15.3 3.33003C15.21 3.29003 15.11 3.27003 15.01 3.27003C15 3.27003 14.98 3.27003 14.97 3.27003C14.87 3.27003 14.77 3.30003 14.67 3.35003L9.01 6.18003L3.34 3.33003C3.11 3.21003 2.83 3.22003 2.61 3.36003C2.39 3.50003 2.25 3.74003 2.25 4.00003V17C2.25 17.28 2.41 17.54 2.66 17.67L8.66 20.67C8.77 20.72 8.88 20.75 9 20.75C9.1 20.75 9.2 20.72 9.3 20.68C9.31 20.68 9.32 20.68 9.33 20.68L14.99 17.85L20.65 20.68C20.76 20.73 20.87 20.76 20.99 20.76C21.13 20.76 21.26 20.72 21.38 20.65C21.6 20.51 21.74 20.27 21.74 20.01V7.00003C21.74 6.72003 21.58 6.46003 21.33 6.33003H21.34ZM9.75 7.46003L14.25 5.21003V16.53L9.75 18.78V7.46003ZM8.25 18.78L3.75 16.53V5.21003L8.25 7.46003V18.78ZM20.25 18.78L15.75 16.53V5.21003L20.25 7.46003V18.78Z" fill="currentColor"/></svg>'
     };
     var sektion73ArrowBackSvg =
       '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
@@ -1062,7 +1077,7 @@
       // Bygg list-items från sektion73Routes
       var listItemsHtml = sektion73Routes.map(function (r) {
         var icon = sektion73Icons[r.iconKey] || sektion73Icons.walk;
-        var color = (r.line && r.line.color) || "#F0A500";
+        var color = (r.line && r.line.color) || "#6E99AE";
         var meta = routeMeta[r.id];
         var distStr = meta ? sektion73FormatDist(meta.distanceM) : "—";
         var timeStr = meta ? sektion73FormatTime(meta.durationS) : "—";

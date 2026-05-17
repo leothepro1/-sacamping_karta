@@ -903,6 +903,21 @@ height:auto;
 display:block;
 color:currentColor;
 }
+#sektion73MapCanvas .sektion73PinBubble .sektion73PinIco img,
+#sektion73MapCanvas .sektion73PinBubble .sektion73PinIco svg{
+width:auto !important;
+height:auto !important;
+max-width:45px !important;
+max-height:45px !important;
+object-fit:contain;
+display:block;
+}
+#sektion73MapCanvas .sektion73PinBubble .sektion73PinIco span{
+font-size:10px !important;
+line-height:1.05 !important;
+font-weight:600 !important;
+letter-spacing:.02em;
+}
 
 #sektion73MapCanvas .sektion73PinWrap[data-icon-key="tba6"] .sektion73PinIco svg{
 width:32px;
@@ -1272,30 +1287,13 @@ function sektion73CloseModal() {
   }
 
  const view = sektion73ReturnView || sektion73StartView;
+  const ledCardWasOpen = sektion73ReturnView && sektion73ReturnView.ledCardWasOpen;
 
-/* NYTT: håll filterbaren nere medan vi återgår */
-sektion73SetFilterBarHidden(true);
-
-if (sektion73Map && view && typeof sektion73Map.easeTo === "function") {
-  const onReturnEnd = () => {
-    sektion73Map.off("moveend", onReturnEnd);
-
-    /* NYTT: först NU (när vi nått previous zoom/view) åker filterbaren upp */
-    sektion73SetFilterBarHidden(false);
-  };
-
-  sektion73Map.on("moveend", onReturnEnd);
-
-  sektion73Map.easeTo({
-    center: view.center,
-    zoom: Math.min(view.zoom, sektion73MaxZoom),
-    pitch: view.pitch,
-    bearing: view.bearing,
-    duration: sektion73PinZoomDur,
-    easing: (t) => 1 - Math.pow(1 - t, 3)
-  });
+/* Ingen zoom sker vid klick — återställ filterbaren direkt */
+if (ledCardWasOpen) {
+  var ledCard = document.getElementById('sektion73LedCard');
+  if (ledCard) ledCard.classList.remove('sektion73PromenadCardHidden');
 } else {
-  /* Fallback: om ingen return-animering sker, visa igen direkt */
   sektion73SetFilterBarHidden(false);
 }
 
@@ -1348,7 +1346,10 @@ tba6: `<svg id="Lager_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBo
 stc: `<img src="https://res.cloudinary.com/dmgmoisae/image/upload/v1779018601/svgviewer-output_-_2026-05-17T134954.377_ter6ae.svg" alt="" style="width:44px;height:auto;display:block" />`,
 maklarhuset: `<img src="https://res.cloudinary.com/dmgmoisae/image/upload/v1779018744/mh_undantagslogotyp_svart_xfhuuo.svg" alt="" style="width:44px;height:auto;display:block" />`,
 glasscafe: `<img src="https://res.cloudinary.com/dmgmoisae/image/upload/v1779019139/R_C3_B6d_20logga_kx7o42.png" alt="" style="width:44px;height:auto;display:block" />`,
-namnam: `<span style="font:700 11px/1.1 var(--sektion73-font);color:#fff;text-align:center;display:inline-block">NAMNAM<br>Restaurant</span>`,
+namnam: `<img src="https://res.cloudinary.com/dmgmoisae/image/upload/v1779042159/logotrang-01_hzpcip.png" alt="" style="width:44px;height:auto;display:block" />`,
+asamarint: `<span style="font:700 9px/1.2 var(--sektion73-font);color:#303030;text-align:center;display:inline-block">Åsa Marint<br>och Fritid</span>`,
+asagastis: `<span style="font:700 9px/1.2 var(--sektion73-font);color:#fff;text-align:center;display:inline-block">Åsa Gästis<br>B&B</span>`,
+apoteket: `<img src="https://res.cloudinary.com/dmgmoisae/image/upload/v1779044509/svgviewer-output_-_2026-05-17T210142.376_ktf0bn.svg" alt="" style="width:44px;height:auto;display:block" />`,
 lomapaloma: `<img src="https://res.cloudinary.com/dmgmoisae/image/upload/v1779019520/LomaPaloma_Kvadrat_Green_130x_oqbosx.png" alt="" style="width:44px;height:auto;display:block" />`
 
 };
@@ -1405,7 +1406,11 @@ const sektion73Pins = [
         sv: "St1-automatstation på Varbergsvägen i Åsa. Bensin, diesel och E85 dygnet runt, betalning vid pumpen. På plats finns även kiosk och butik med det vanliga — dricka, snacks, tidningar och det du glömde handla. Postombud för paket, både upphämtning och inlämning.",
         en: "St1 self-service station on Varbergsvägen in Åsa. Petrol, diesel and E85 around the clock, with pay-at-the-pump. On site you'll also find a kiosk and shop with the usual — drinks, snacks, newspapers and the things you forgot to buy. Postal agent for parcels — both pickup and drop-off.",
         de: "St1-Selbstbedienungstankstelle an der Varbergsvägen in Åsa. Benzin, Diesel und E85 rund um die Uhr, Bezahlung direkt an der Zapfsäule. Vor Ort auch Kiosk und Laden mit dem Üblichen — Getränke, Snacks, Zeitungen und das, was vergessen wurde. Poststelle für Pakete — Abholung und Abgabe."
-      }
+      },
+      cta1Text: { sv: "Läs mer", en: "Read more", de: "Mehr erfahren" },
+      cta1Href: "https://st1.se/station/asa-varbergsvagen",
+      cta2Text: { sv: "", en: "", de: "" },
+      cta2Href: ""
     }
   },
   {
@@ -1710,7 +1715,7 @@ const sektion73Pins = [
       bubbleBg: "#fff",
       pointerTop: "#fff"
     },
-    lngLat: [12.123653, 57.349728],
+    lngLat: [12.121778, 57.357746],
     modal: {
       kicker: { sv: "BUTIK", en: "SHOP", de: "LADEN" },
       title: { sv: "Loma Paloma", en: "Loma Paloma", de: "Loma Paloma" },
@@ -1729,7 +1734,94 @@ const sektion73Pins = [
       cta2Text: { sv: "", en: "", de: "" },
       cta2Href: ""
     }
+  },
+  {
+    id: "sektion73Pin_apoteket_0001",
+    label: "Apoteket Åsa",
+    filter: "Butiker",
+    iconKey: "apoteket",
+    ui: {
+      bubbleBg: "#1D6453",
+      pointerTop: "#1D6453"
+    },
+    lngLat: [12.108771, 57.35383],
+    modal: {
+      kicker: { sv: "HÄLSA", en: "HEALTH", de: "GESUNDHEIT" },
+      title: { sv: "Apoteket Åsa", en: "Apoteket Åsa", de: "Apoteket Åsa" },
+      images: [
+        "https://res.cloudinary.com/dmgmoisae/image/upload/v1779044645/apoteket-980x550_akhzvd.jpg"
+      ],
+      h: { sv: "Apoteket Åsa", en: "Apoteket Åsa", de: "Apoteket Åsa" },
+      p: {
+        sv: "Apoteket på Pölagårdsvägen 29. Recept, receptfria läkemedel och egenvårdsprodukter. Öppet måndag–fredag 08–17, stängt helger.",
+        en: "Pharmacy at Pölagårdsvägen 29. Prescriptions, over-the-counter medicines and self-care products. Open Monday–Friday 08–17, closed weekends.",
+        de: "Apotheke in der Pölagårdsvägen 29. Rezepte, rezeptfreie Medikamente und Pflegeprodukte. Geöffnet Montag–Freitag 08–17 Uhr, an Wochenenden geschlossen."
+      },
+      cta1Text: { sv: "Läs mer", en: "Read more", de: "Mehr erfahren" },
+      cta1Href: "https://www.apoteket.se/apotek/apoteket-asa-asa/",
+      cta2Text: { sv: "", en: "", de: "" },
+      cta2Href: ""
+    }
+  },
+  {
+    id: "sektion73Pin_asagastis_0001",
+    label: "Åsa Gästis B&B",
+    filter: "Boenden",
+    iconKey: "asagastis",
+    ui: {
+      bubbleBg: "#6AA370",
+      pointerTop: "#6AA370"
+    },
+    lngLat: [12.122538, 57.355255],
+    modal: {
+      kicker: { sv: "BOENDE", en: "ACCOMMODATION", de: "UNTERKUNFT" },
+      title: { sv: "Åsa Gästis B&B", en: "Åsa Gästis B&B", de: "Åsa Gästis B&B" },
+      images: [
+        "https://res.cloudinary.com/dmgmoisae/image/upload/v1779043606/var-frukostmatsal_ivg70v.jpg",
+        "https://res.cloudinary.com/dmgmoisae/image/upload/v1779043610/373c1ca0-3a95-4201-b87c-89cfd031eae7_bkdyjt.jpg"
+      ],
+      h: { sv: "Åsa Gästis B&B", en: "Åsa Gästis B&B", de: "Åsa Gästis B&B" },
+      p: {
+        sv: "Åsa Gästis är ett familjeägt boende i ett lugnt och centralt läge i det mysiga kustsamhället Åsa. Bekvämlighet och avkoppling prioriteras — sängarna står bäddade och det ingår alltid lån av handdukar och slutstädning i priset. Varje rum har egen toalett och dusch samt kök/pentry. Som gäst finns tillgång till en del av trädgården, med möjlighet att låna en grill om vädret lockar till matlagning utomhus. En kort promenad bort väntar salta havsbad, restauranger och affärer.",
+        en: "Åsa Gästis is a family-run accommodation in a quiet and central location in the charming coastal village of Åsa. Comfort and relaxation come first — beds are made on arrival and towels and a final clean are always included in the price. Every room has its own toilet and shower as well as a kitchenette. Guests have access to part of the garden, with a barbecue available to borrow when the weather invites outdoor cooking. A short walk away are the sea, restaurants and shops.",
+        de: "Åsa Gästis ist eine familiengeführte Unterkunft in ruhiger und zentraler Lage im malerischen Küstenort Åsa. Komfort und Erholung stehen im Mittelpunkt — die Betten sind bezogen, Handtücher und eine Endreinigung sind immer im Preis inbegriffen. Jedes Zimmer verfügt über ein eigenes Bad mit Dusche sowie eine Küchenzeile. Als Gast steht ein Teil des Gartens zur Verfügung, mit der Möglichkeit, einen Grill zu leihen, wenn das Wetter zum Kochen im Freien einlädt. Ein kurzer Spaziergang bringt einen ans Meer, zu Restaurants und Geschäften."
+      },
+      cta1Text: { sv: "Läs mer", en: "Read more", de: "Mehr erfahren" },
+      cta1Href: "https://asagastis.se/",
+      cta2Text: { sv: "", en: "", de: "" },
+      cta2Href: ""
+    }
+  },
+  {
+    id: "sektion73Pin_asamarint_0001",
+    label: "Åsa Marint och Fritid",
+    filter: "Att göra",
+    iconKey: "asamarint",
+    ui: {
+      bubbleBg: "#fff",
+      pointerTop: "#fff"
+    },
+    lngLat: [12.122944, 57.352913],
+    modal: {
+      kicker: { sv: "AKTIVITETER", en: "ACTIVITIES", de: "AKTIVITÄTEN" },
+      title: { sv: "Åsa Marint och Fritid", en: "Åsa Marint och Fritid", de: "Åsa Marint och Fritid" },
+      images: [
+        "https://res.cloudinary.com/dmgmoisae/image/upload/v1779043171/original_yl4pho.jpg",
+        "https://res.cloudinary.com/dmgmoisae/image/upload/v1779043188/307690853_405816441712688_5298175949688044183_n.jpg_rhq57q.jpg"
+      ],
+      h: { sv: "Åsa Marint och Fritid", en: "Åsa Marint och Fritid", de: "Åsa Marint och Fritid" },
+      p: {
+        sv: "Åsa Marint och Fritid ligger i Åsa mellan Kungsbacka och Varberg. Här finns cyklar både för den som vill ha en lätttrampad cykel med många växlar eller en bekväm damcykel med 3 eller 7 växlar. Det finns också barncyklar, cykelvagnar och barnsadlar. Det finns en begränsad möjlighet att mot en extra avgift få cykeln utkörd eller hämtad inom Kungsbacka och Varberg.\n\nVid cykelhyra medföljer hjälm, extra slang samt en mindre verktygssats för enklare justeringar och reparationer. För komplett prislista och hyresvillkor, besök hemsidan.",
+        en: "Åsa Marint och Fritid is located in Åsa between Kungsbacka and Varberg. Bicycles are available for those who want a light-pedalling bike with many gears or a comfortable ladies bike with 3 or 7 gears. Children's bikes, bike trailers and child seats are also available. For an extra fee, delivery or pick-up within Kungsbacka and Varberg is possible.\n\nBicycle hire includes a helmet, spare inner tube and a small tool kit for basic adjustments and repairs. For full pricing and rental terms, visit the website.",
+        de: "Åsa Marint och Fritid befindet sich in Åsa zwischen Kungsbacka und Varberg. Hier gibt es Fahrräder für alle, die ein leicht zu tretendes Fahrrad mit vielen Gängen oder ein bequemes Damenfahrrad mit 3 oder 7 Gängen suchen. Fahrradanhänger und Kindersitze sind ebenfalls verfügbar. Gegen Aufpreis kann das Fahrrad innerhalb von Kungsbacka und Varberg geliefert oder abgeholt werden.\n\nBei der Fahrradmiete sind Helm, Ersatzschlauch und ein kleines Werkzeugset inbegriffen. Vollständige Preisliste auf der Website."
+      },
+      cta1Text: { sv: "Läs mer", en: "Read more", de: "Mehr erfahren" },
+      cta1Href: "https://kattegattleden.se/plats/asa-marint-och-fritid-cykeluthyrning",
+      cta2Text: { sv: "", en: "", de: "" },
+      cta2Href: ""
+    }
   }
+
 ];
 
 /* REMOVED: all other pins kept only HOME */
@@ -2392,7 +2484,7 @@ function sektion73InjectFilterCSS() {
     background: #f3f3f3;
     color: rgb(64, 61, 59);
     font-family: var(--sektion73-font);
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 500;
     white-space: nowrap;
     user-select: none;
@@ -2424,7 +2516,7 @@ background: #DDD7D2;
     background: #f3f3f3;
     color: rgb(64, 61, 59);
     font-family: var(--sektion73-font);
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 500;
     white-space: nowrap;
     user-select: none;
@@ -2471,6 +2563,10 @@ aspect-ratio: auto !important;
     border-color: rgba(90, 60, 0, .22);
     color: #fff;
     font-weight: 600;
+}
+.sektion73FilterBtn[aria-pressed="true"]:hover,
+.sektion73FilterBtn[aria-pressed="true"]:active {
+    background: #6E99AE;
 }
 
     .sektion73FilterIco{
@@ -2800,11 +2896,19 @@ close.addEventListener("click", (e) => {
  const filterConfig = [
   {
     label: "Mat & dryck",
-    icon: `<svg width="800" height="800" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentcolor"><path d="M17 13V8.9c1.7-.2 3-1.7 3-3.4C20 3.6 18.4 2 16.5 2c-1.8 0-3.2 1.3-3.4 3h-2.3l-.9-2.3C9.8 2.3 9.4 2 9 2H5c-.6 0-1 .4-1 1s.4 1 1 1h3.3l.3 1H8c-.6 0-1 .4-1 1v7c0 2.4 1.7 4.4 4 4.9V20h-1c-.6 0-1 .4-1 1s.4 1 1 1h4c.6 0 1-.4 1-1s-.4-1-1-1h-1v-2.1c2.3-.5 4-2.5 4-4.9m-.5-9c.8 0 1.5.7 1.5 1.5 0 .7-.4 1.2-1 1.4V6c0-.6-.4-1-1-1h-.9c.2-.6.7-1 1.4-1M12 16c-1.7 0-3-1.3-3-3V7h6v6c0 1.7-1.3 3-3 3"></path></svg>`
+    icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.248 2.946a.75.75 0 1 0-1.496.108l.342 4.737A3.575 3.575 0 0 0 8 11.047V21a.75.75 0 0 0 1.5 0v-9.992a3.57 3.57 0 0 0 1.127-.49l.113-.074a3.765 3.765 0 0 0 1.682-2.872l.326-4.518a.75.75 0 0 0-1.496-.108l-.326 4.518a2.264 2.264 0 0 1-1.012 1.727l-.112.074A2.075 2.075 0 0 1 6.59 7.683l-.342-4.737Z" fill="currentColor"/><path d="M19.25 3a.75.75 0 0 0-.987-.712l-.41.126a4.75 4.75 0 0 0-3.353 4.54V15c0 .966.784 1.75 1.75 1.75h1.5V21a.75.75 0 0 0 1.5 0V3Zm-1.5 12.25V4.071A3.25 3.25 0 0 0 16 6.954V15c0 .138.112.25.25.25h1.5Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/><path d="M8.75 2.25A.75.75 0 0 1 9.5 3v4.5a.75.75 0 1 1-1.5 0V3a.75.75 0 0 1 .75-.75Z" fill="currentColor"/></svg>`
+  },
+  {
+    label: "Boenden",
+    icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.819 5.25v1.385h2.362V5.25h-2.362Zm3.862 1.385V5c0-.69-.56-1.25-1.25-1.25h-2.862c-.69 0-1.25.56-1.25 1.25v1.635H4.5c-.69 0-1.25.56-1.25 1.25V19c0 .69.56 1.25 1.25 1.25h15c.69 0 1.25-.56 1.25-1.25V7.885c0-.69-.56-1.25-1.25-1.25h-4.819Zm-9.931 1.5V18.75h2.056V8.135H4.75Zm3.556 0V18.75h7.388V8.135H8.306Zm8.888 0V18.75h2.056V8.135h-2.056Z" fill="currentColor" fill-rule="evenodd"/></svg>`
+  },
+  {
+    label: "Att göra",
+    icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 9.25h-.75V6.5c0-.69-.56-1.25-1.25-1.25H16c-.41 0-.75.34-.75.75v3.25h-6.5V6c0-.41-.34-.75-.75-.75H5.5c-.69 0-1.25.56-1.25 1.25v2.75H3.5c-.69 0-1.25.399-1.25 1.089v3.384c0 .69.56 1.027 1.25 1.027h.75v2.75c0 .69.56 1.25 1.25 1.25H8c.41 0 .75-.34.75-.75v-3.25h6.5V18c0 .41.34.75.75.75h2.5c.69 0 1.25-.56 1.25-1.25v-2.75h.75c.69 0 1.25-.39 1.25-1.08V10.4c0-.69-.56-1.149-1.25-1.149Zm-16.75 4v-2.5h.5v2.5h-.5Zm3.5 4h-1.5V6.75h1.5v10.5Zm1.5-4v-2.5h6.5v2.5h-6.5Zm9.5 4h-1.5V6.75h1.5v10.5Zm2-4h-.5v-2.5h.5v2.5Z" fill="currentColor"/></svg>`
   },
   {
     label: "Butiker",
-    icon: `<svg width="800" height="800" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentcolor"><path d="M19.8 5.4c-.2-.2-.5-.4-.8-.4 0-1.7-1.3-3-3-3H8C6.3 2 5 3.3 5 5c-.3 0-.6.2-.8.4L2.9 7.3c-.6.9-.8 2-.5 3S3.2 12 4 12.4V17c0 2.2 1.8 4 4 4h8c2.2 0 4-1.8 4-4v-4.6c.8-.5 1.3-1.2 1.6-2.1.3-1 .1-2.2-.5-3zM8 4h8c.6 0 1 .4 1 1H7c0-.6.4-1 1-1m6 3v2c0 1.1-.9 2-2 2s-2-.9-2-2V7zm-8.3 4c-.1 0-.3-.1-.4-.1s-.2-.1-.2-.1c-.4-.2-.6-.5-.7-.9-.1-.5 0-1 .2-1.4l1-1.4H8v1.8c0 .9-.6 1.8-1.4 2h-.8c0 .1 0 .1-.1.1m7.3 8h-2v-2c0-.6.4-1 1-1s1 .4 1 1zm5-2c0 1.1-.9 2-2 2h-1v-2c0-1.7-1.3-3-3-3s-3 1.3-3 3v2H8c-1.1 0-2-.9-2-2v-4h.4c.1 0 .2 0 .3-.1.1 0 .2 0 .3-.1.1 0 .2-.1.4-.1.2-.1.3-.1.4-.2q.75-.3 1.2-.9l.1.1.3.3c.1.1.2.1.3.2s.3.2.4.3.2.1.3.2c.2.1.3.1.5.2.1 0 .2.1.3.1h.8c.3 0 .6 0 .8-.1.1 0 .2-.1.3-.1.2-.1.4-.1.5-.2.1 0 .2-.1.3-.2s.3-.2.4-.3.2-.1.3-.2l.3-.3s.1 0 .1-.1c.3.4.7.7 1.1.9.1.1.3.1.4.2.1 0 .2.1.4.1.1 0 .2 0 .3.1.1 0 .2 0 .3.1h.4V17zm1.6-7.2c-.1.4-.4.8-.7.9-.1 0-.2.1-.3.1s-.2.1-.4.1h-.9c-.8-.3-1.4-1.1-1.4-2V7h2.5l1 1.4c.3.4.4 1 .2 1.4"></path></svg>`
+    icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 7.25h-6.11c.31-.87 1.14-1.5 2.11-1.5h2c1.52 0 2.75-1.23 2.75-2.75 0-.41-.34-.75-.75-.75s-.75.34-.75.75c0 .69-.56 1.25-1.25 1.25h-2c-.9 0-1.72.33-2.37.87-.41-1.64-1.92-2.87-3.72-2.87-1.62 0-3.07 1-3.62 2.49a.75.75 0 1 0 1.41.51c.33-.9 1.21-1.51 2.21-1.51 1.29 0 2.34 1.01 2.34 2.25v1.25H5c-1.52 0-2.75 1.23-2.75 2.75v9c0 1.52 1.23 2.75 2.75 2.75h14c1.52 0 2.75-1.23 2.75-2.75V10c0-1.52-1.23-2.75-2.75-2.75ZM20.25 10v2.25h-7.5v-3.5H19c.69 0 1.25.56 1.25 1.25ZM5 8.75h6.25v3.5h-7.5V10c0-.69.56-1.25 1.25-1.25ZM3.75 19v-5.25h7.5v6.5H5c-.69 0-1.25-.56-1.25-1.25ZM19 20.25h-6.25v-6.5h7.5V19c0 .69-.56 1.25-1.25 1.25Z" fill="currentColor"/></svg>`
   }
 ];
 filterConfig.forEach((filterItem) => {
@@ -2862,76 +2966,31 @@ function sektion73SetFilterBarHidden(hidden) {
 }
 
 function sektion73ZoomToPinThenOpenModal(pin) {
-  // Stäng ev. befintlig modal direkt (så fokus blir zoom först)
   if (sektion73ModalOpen) sektion73CloseModal();
 
-  // Safety: rensa tidigare moveend-hook om man klickar snabbt mellan pins
   if (sektion73ActiveMoveEndHandler) {
-    sektion73Map.off("moveend", sektion73ActiveMoveEndHandler);
+    sektion73Map.off('moveend', sektion73ActiveMoveEndHandler);
     sektion73ActiveMoveEndHandler = null;
   }
 
-  // Spara vyn där användaren var innan pin-zoom
+  // Snapshot ledCard state before hiding it
+  var ledCard = document.getElementById('sektion73LedCard');
+  var ledCardWasOpen = ledCard && !ledCard.classList.contains('sektion73PromenadCardHidden');
+  if (ledCardWasOpen) ledCard.classList.add('sektion73PromenadCardHidden');
+
   sektion73ReturnView = {
     center: sektion73Map.getCenter().toArray(),
     zoom: sektion73Map.getZoom(),
     pitch: sektion73Map.getPitch(),
-    bearing: sektion73Map.getBearing()
+    bearing: sektion73Map.getBearing(),
+    ledCardWasOpen: ledCardWasOpen
   };
 
-  sektion73IsZoomingToPin = true;
-  sektion73PendingPinId = pin.id;
-
-  // Vänta på att zoomen är klar → öppna modal
-  const onMoveEnd = () => {
-    if (!sektion73IsZoomingToPin) return;
-    if (sektion73PendingPinId !== pin.id) return;
-
-    sektion73Map.off("moveend", onMoveEnd);
-    sektion73ActiveMoveEndHandler = null;
-
-    sektion73IsZoomingToPin = false;
-    sektion73PendingPinId = null;
-
-    /* NYTT: filterbaren ner precis innan modalen åker in */
-    sektion73SetFilterBarHidden(true);
-
-    /* Låt browsern “commit:a” klass + starta transition innan modal-class togglas */
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        sektion73OpenModal(pin.modal);
-      });
+  sektion73SetFilterBarHidden(true);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      sektion73OpenModal(pin.modal);
     });
-  };
-
-  sektion73ActiveMoveEndHandler = onMoveEnd;
-  sektion73Map.on("moveend", onMoveEnd);
-
-  // Ease-in-out (cubic): startar mjukt, accelererar, bromsar mjukt
-  const sektion73EaseInOutCubic_00035 = (t) =>
-    (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-
-  // Dynamisk duration: bara lite längre när hoppet är stort
-  const sektion73TargetZoom_00036 = Math.min(sektion73PinZoom, sektion73MaxZoom);
-  const sektion73CurrentZoom_00037 = sektion73Map.getZoom();
-  const sektion73ZoomDelta_00038 =
-    Math.abs(sektion73TargetZoom_00036 - sektion73CurrentZoom_00037);
-
-  // 0..1 där 0 = litet hopp, 1 = stort hopp (tuned för din karta)
-  const sektion73ZoomDeltaNorm_00039 = Math.min(1, sektion73ZoomDelta_00038 / 4.2);
-
-  // Lägg till max +sektion73PinZoomDurExtraMax ms vid riktigt stora hopp
-  const sektion73DynamicDur_00040 =
-    sektion73PinZoomDur +
-    Math.round(sektion73ZoomDeltaNorm_00039 * sektion73PinZoomDurExtraMax);
-
-  sektion73Map.easeTo({
-    center: pin.lngLat,
-    zoom: sektion73TargetZoom_00036,
-    pitch: sektion73Pitch,
-    bearing: sektion73Bearing,
-    duration: sektion73DynamicDur_00040,
-    easing: sektion73EaseInOutCubic_00035
   });
 }
 
